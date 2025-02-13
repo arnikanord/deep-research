@@ -1,0 +1,4 @@
+aiohttp
+gradio
+python-dotenv
+nest_asyncio
