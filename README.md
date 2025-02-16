@@ -2,7 +2,7 @@
 
 This notebook implements an **AI researcher** that continuously searches for information based on a user query until the system is confident that it has gathered all the necessary details. It makes use of several services to do so:
 
-- **SERPAPI**: To perform Google searches.
+- **Google Custom Search API**: To perform Google searches (100 free queries per day).
 - **Jina**: To fetch and extract webpage content.
 - **OpenRouter** (default model: `anthropic/claude-3.5-haiku`): To interact with a LLM for generating search queries, evaluating page relevance, and extracting context.
 
@@ -10,7 +10,7 @@ This notebook implements an **AI researcher** that continuously searches for inf
 
 - **Iterative Research Loop:** The system refines its search queries iteratively until no further queries are required.
 - **Asynchronous Processing:** Searches, webpage fetching, evaluation, and context extraction are performed concurrently to improve speed.
-- **Duplicate Filtering:** Aggregates and deduplicates links within each round, ensuring that the same link isn’t processed twice.
+- **Duplicate Filtering:** Aggregates and deduplicates links within each round, ensuring that the same link isn't processed twice.
 - **LLM-Powered Decision Making:** Uses the LLM to generate new search queries, decide on page usefulness, extract relevant context, and produce a final comprehensive report.
 - **Gradio Interface:** Use the `open-deep-researcher - gradio` notebook if you want to use this in a functional UI
 
@@ -18,7 +18,7 @@ This notebook implements an **AI researcher** that continuously searches for inf
 
 - API access and keys for:
   - **OpenRouter API**
-  - **SERPAPI API**
+  - **Google Custom Search API** and Custom Search Engine ID
   - **Jina API**
 
 ## Setup
@@ -31,7 +31,11 @@ This notebook implements an **AI researcher** that continuously searches for inf
    Run the first cell to set up `nest_asyncio`.
 
 3. **Configure API Keys:**
-   - Replace the placeholder values in the notebook for `OPENROUTER_API_KEY`, `SERPAPI_API_KEY`, and `JINA_API_KEY` with your actual API keys.
+   - Replace the placeholder values in the notebook for:
+     - `OPENROUTER_API_KEY`
+     - `GOOGLE_CSE_API_KEY` (Google Custom Search API key)
+     - `GOOGLE_CSE_ID` (Google Custom Search Engine ID)
+     - `JINA_API_KEY`
 
 ## Usage
 
@@ -76,6 +80,38 @@ This notebook implements an **AI researcher** that continuously searches for inf
 
 - **API Issues:**  
   Verify that your API keys are correct and that you are not exceeding any rate limits.
+
+## Running in Production with tmux
+
+To run the app persistently in a production environment using tmux:
+
+1. **Attach to tmux session:**
+   ```bash
+   tmux attach -t bots_session
+   ```
+   If the session doesn't exist, create it with:
+   ```bash
+   tmux new-session -s bots_session
+   ```
+
+2. **Create a new window for the app:**
+   ```bash
+   tmux new-window -t bots_session:18 -n "deep-research" "cd ~/Projects/web/deep-research && python3 app.py"
+   ```
+   This creates a new window named "deep-research" and starts the app.
+
+3. **Managing the app:**
+   - View all windows: Press `Ctrl+b` then `w`
+   - Switch to window: Click on window number or use `Ctrl+b` then window number
+   - Stop the app: Switch to its window, press `Ctrl+C`
+   - Close window: After stopping the app, type `exit` or press `Ctrl+b` then `&`
+   - Detach from tmux: Press `Ctrl+b` then `d`
+
+4. **Accessing the app:**
+   - Local URL: http://0.0.0.0:7860
+   - Remote URL: http://your-server-ip:7860
+
+Note: If port 7860 is already in use, either free the port by stopping the existing process or use a different port by modifying the `server_port` parameter in `app.py`.
 
 ---
 

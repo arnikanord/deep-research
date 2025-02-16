@@ -1,11 +1,11 @@
 import gradio as gr
-from researcher import async_main, read_readme  # Import async_main
+from researcher import async_main, read_readme, AVAILABLE_MODELS  # Import AVAILABLE_MODELS
 import asyncio
 
 print("app.py: Starting app...") # Log app start
 
-async def run_research_ui(query, max_iterations):
-    print(f"run_research_ui: started with query: '{query}', max_iterations: {max_iterations}") # Log UI function start
+async def run_research_ui(query, max_iterations, model_name):
+    print(f"run_research_ui: started with query: '{query}', max_iterations: {max_iterations}, model: {model_name}") # Log UI function start
     try:
         max_iterations = int(max_iterations)
         if not query:
@@ -13,11 +13,11 @@ async def run_research_ui(query, max_iterations):
             print("run_research_ui: No query entered") # Log no query
             return
 
-        # Use asyncio.gather to run the async generator
+        # Pass the selected model to async_main
         final_report = ""
         status_updates = ""
         print("run_research_ui: Entering async_main loop...") # Log async_main loop start
-        async for status, report_part in async_main(query, max_iterations):
+        async for status, report_part in async_main(query, max_iterations, model_name):
             status_updates += status + "\n"
             if report_part:  # If there's a report part, update final_report
                 final_report = report_part
@@ -40,7 +40,8 @@ iface = gr.Interface(
     fn=run_research_ui,
     inputs=[
         gr.Textbox(lines=2, placeholder="Enter your research query...", label="Research Query"),
-        gr.Slider(minimum=1, maximum=20, step=1, value=10, label="Maximum Iterations")
+        gr.Slider(minimum=1, maximum=20, step=1, value=10, label="Maximum Iterations"),
+        gr.Dropdown(choices=list(AVAILABLE_MODELS.keys()), value="Dolphin Mistral 24b (Free)", label="Select Model")
     ],
     outputs=[
         gr.Textbox(label="Status", interactive=False),  # Status output first
@@ -60,5 +61,11 @@ with iface:
     print("app.py: README button added.") # Log README button
 
 print("app.py: Launching Gradio interface...") # Log UI launch
-iface.launch()
+iface.launch(
+    server_name="0.0.0.0",  # Listen on all network interfaces
+    server_port=7860,       # Back to original port 7860
+    share=True,             # Still try to create a share link
+    show_error=True,        # Show detailed error messages
+    debug=True             # Enable debug mode for more information
+)
 print("app.py: Gradio interface launched.") # Log UI launched
