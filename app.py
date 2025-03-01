@@ -40,7 +40,7 @@ iface = gr.Interface(
     fn=run_research_ui,
     inputs=[
         gr.Textbox(lines=2, placeholder="Enter your research query...", label="Research Query"),
-        gr.Slider(minimum=1, maximum=20, step=1, value=10, label="Maximum Iterations"),
+        gr.Slider(minimum=1, maximum=20, step=1, value=1, label="Maximum Iterations"),
         gr.Dropdown(choices=list(AVAILABLE_MODELS.keys()), value="Dolphin Mistral 24b (Free)", label="Select Model")
     ],
     outputs=[
