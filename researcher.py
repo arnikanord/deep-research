@@ -22,7 +22,9 @@ AVAILABLE_MODELS = {
     "Dolphin Mistral 24b (Free)": "cognitivecomputations/dolphin3.0-mistral-24b:free",
     "OpenAI O3 Mini ($1.1/$4.4)": "openai/o3-mini-high",
     "Claude 3.5 Haiku ($0.8/$4)": "anthropic/claude-3.5-haiku",
-    "Claude 3.5 Sonnet ($3/$15)": "anthropic/claude-3.5-sonnet-20240620"
+    "Claude 3.7 Sonnet ($3/$15)": "anthropic/claude-3.7-sonnet",
+    "Google Gemini Flash 2.0 ($0.1/$0.4)": "google/gemini-2.0-flash-001",
+    "Google Gemini Flash Lite 2.0 (Free)": "google/gemini-2.0-flash-lite-preview-02-05:free"
 }
 
 # Default LLM model
